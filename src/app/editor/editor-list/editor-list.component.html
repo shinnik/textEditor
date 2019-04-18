@@ -1,0 +1,12 @@
+<ul (appListChange)="onListChange($event)" class="list-container">
+  <ng-container>
+    <li *ngFor="let element of elements; let i = index" class="element-container">
+      <app-render-block class="render-container" [block]="element"></app-render-block>
+      <app-adding-button (choose)="onChoose($event)" class="adding-button" [index]="i"></app-adding-button>
+    </li>
+  </ng-container>
+</ul>
+<button (click)="onUndo($event)">UNDO</button>
+<button (click)="onRedo($event)">REDO</button>
+<!--<app-editor class="container"></app-editor>-->
+

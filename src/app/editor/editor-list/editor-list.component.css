@@ -1,0 +1,37 @@
+.list-container {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  padding: 0px;
+}
+
+.element-container {
+  display: inline-flex;
+  list-style-type: none;
+  /*padding-left: 80px;*/
+  /*padding-left: 80px;*/
+  padding-bottom: 10px;
+  /*border: 1px solid black;*/
+}
+
+.element-container:hover > .adding-button {
+  display: inline-flex;
+  position: relative;
+  width: 30%;
+  height: fit-content;
+  padding-top: 5px;
+}
+
+ul.wysiwyg-list {
+  padding: 0px;
+  list-style-type: none;
+}
+
+.render-container {
+  width: 70%;
+  height: inherit;
+}
+
+.adding-button {
+  display: none;
+}
