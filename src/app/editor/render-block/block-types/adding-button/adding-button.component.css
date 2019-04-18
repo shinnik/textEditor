@@ -1,0 +1,23 @@
+.button {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  border: 2px solid #ffdd2d;
+  background-color: #ffdd2d;
+  margin-right: 5px;
+}
+
+.button:hover {
+  background-color: darkgoldenrod;
+  border: 2px solid darkgoldenrod;
+}
+
+.option {
+  background-color: #ffdd2d;
+}
+
+.option-selection {
+  /*position: relative;*/
+  width: calc(100% - 35px);
+  background-color: lightgray;
+}
