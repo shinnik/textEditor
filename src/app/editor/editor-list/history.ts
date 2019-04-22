@@ -4,7 +4,7 @@ class HistoryNode {
 
   data; next; prev;
 
-  constructor (data: {block_id: string, block_type: string, block_content: string, anchor: number}) {
+  constructor (data: {block_id: string, block_type: string, block_content: string, anchor: number, mutation: string}) {
     this.data = data;
     this.next = null;
     this.prev = null;
@@ -24,13 +24,15 @@ export class StateHistory {
   }
 
   private applyChanges (data, source) {
-    const changeType = this.determineChangeType(data.id, source);
-    const {anchor, ...block} = data;
+    // const changeType = this.determineChangeType(data.id, source);
+    const changeType = this.determineChangeType2(data.mutation, source);
+    const { anchor, ...block } = data;
     console.log(changeType);
     if (changeType === 'update') {
       const blockToUpdate = this.currentState.filter((obj) => obj.id === data.id)[0];
+      console.log('BTU', blockToUpdate);
       const place = this.currentState.indexOf(blockToUpdate);
-      const copy = Object.assign({}, blockToUpdate);
+      const copy = { ...blockToUpdate };
       this.currentState.splice(place, 1);
       copy.content = data.content;
       this.currentState.splice(place, 0, copy);
@@ -41,21 +43,36 @@ export class StateHistory {
     }
   }
 
-  private determineChangeType(blockID, source) {
-    // debugger;
-    const nodes = this.findNodes(blockID);
-    // console.log(nodes.length);
-    const nodesCount = nodes.length || 0;
-    if (nodesCount > 1) {
-      return 'update';
-    } else if (nodesCount === 1 && (source === 'redo' || source === 'new')) {
-      return 'update';
-    } else if (nodesCount === 1 && source === 'undo') {
+  private determineChangeType2(mutationType, source) {
+    console.log('MUTATION TYPE', mutationType, 'SOURCE', source);
+    if (mutationType === 'add' && source === 'undo') {
       return 'delete';
-    } else if (nodesCount === 0)  {
+    } else if (mutationType === 'add' && (source === 'redo' || source === 'new')) {
       return 'add';
+    } else if (mutationType === 'delete' && source === 'undo') {
+      return 'add';
+    } else if (mutationType === 'delete' && (source === 'redo' || source === 'new')) {
+      return 'delete';
+    } else {
+      return 'update';
     }
   }
+
+  // private determineChangeType(blockID, source) {
+  //   // debugger;
+  //   const nodes = this.findNodes(blockID);
+  //   // console.log(nodes.length);
+  //   const nodesCount = nodes.length || 0;
+  //   if (nodesCount > 1) {
+  //     return 'update';
+  //   } else if (nodesCount === 1 && (source === 'redo' || source === 'new')) {
+  //     return 'update';
+  //   } else if (nodesCount === 1 && source === 'undo') {
+  //     return 'delete';
+  //   } else if (nodesCount === 0)  {
+  //     return 'add';
+  //   }
+  // }
 
   private findNodes(nodeID) {
     let cur = this.current;
@@ -70,7 +87,7 @@ export class StateHistory {
         cur = cur.prev;
       }
     }
-    console.log('NODES', nodes);
+    // console.log('NODES', nodes);
     return nodes;
   }
 
@@ -96,11 +113,10 @@ export class StateHistory {
     }
   }
 
-  update(id: string, content: string) {
-    console.log(id, this.currentState)
+  update(id: string, content: string, mutation: string) {
+    // console.log(id, this.currentState);
     const blockToUpdate = this.currentState.filter((block) => block.id === id)[0];
-    const copy = Object.assign({}, blockToUpdate);
-    copy.content = content;
+    const copy = {...blockToUpdate, content: content, mutation: mutation};
     // console.log('COPY', copy);
     this.push(copy);
   }
@@ -114,9 +130,9 @@ export class StateHistory {
   }
 
   undo () {
-    console.log(this.current);
+    console.log('UNDO', this.current);
     if (this.current.prev) {
-      this.applyChanges(this.current.prev.data, 'undo');
+      this.applyChanges(this.current.data, 'undo');
       this.current = this.current.prev;
     }
   }

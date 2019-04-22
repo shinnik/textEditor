@@ -16,6 +16,8 @@ export class EditorListStateManagerService {
     id: ID(),
     type: IBlockTypes.TEXTBOX,
     content: 'SOME TEXT',
+    anchor: 0,
+    mutation: 'add'
   }
 
   private history = new StateHistory(this.initialState);
@@ -36,19 +38,22 @@ export class EditorListStateManagerService {
   }
 
   updateBlock(blockID: string, content: string): void {
-    this.history.update(blockID, content);
+    const changeType = 'update';
+    this.history.update(blockID, content, changeType);
     this.observableState.next(this.history.currentState);
 
   }
 
   setState(addingInfo: any): void {
 
+    // const changeType = 'add';
     const index = addingInfo.index;
     const newBlock = {
       id: ID(),
       type: addingInfo.type,
       content: addingInfo.content,
-      anchor: index
+      anchor: index,
+      mutation: 'add'
     };
     this.history.push(newBlock);
     // debugger;
