@@ -2,6 +2,8 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {IBlock, IBlockTypes} from '../models';
 import { EditorListStateManagerService } from "./editor-list-state-manager.service";
 import ID from '../../utils/ID';
+import {HistoryManagerService} from "./history-manager.service";
+import {EditorListStateManager2Service} from "./editor-list-state-manager2.service";
 
 
 @Component({
@@ -15,7 +17,8 @@ export class EditorListComponent implements OnInit {
   // subscription: Subscription;
   public elements: Array<IBlock>;
 
-  constructor(private stateManager: EditorListStateManagerService,
+  constructor(public stateManager: EditorListStateManager2Service,
+              private historyManager: HistoryManagerService,
               private cdr: ChangeDetectorRef) {
 
   }
@@ -25,19 +28,28 @@ export class EditorListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.stateManager.getState().subscribe((state) => {this.elements = state; console.log(this.elements); this.cdr.detectChanges()});
+    console.log(this.stateManager.state);
+    this.elements = this.stateManager.state;
+    console.log(this.elements, 'ELEMENTS');
   }
 
   onUndo () {
-    this.stateManager.prevState();
+    // debugger;
+    // console.log(this.historyManager.current().undo());
+    // this.historyManager.prev().undo();
+    this.historyManager.prev().undo();
+    this.elements = this.stateManager.state;
+    // this.stateManager.prevState();
   }
 
   onRedo () {
-    this.stateManager.nextState();
+    this.historyManager.next().redo();
+    this.elements = this.stateManager.state;
   }
 
   onChoose(addingInfo) {
-    this.stateManager.setState(addingInfo);
+    const {name, index, ...block} = addingInfo;
+    this.stateManager.state.push({id: ID(), ...block});
   }
 
-}}
+}

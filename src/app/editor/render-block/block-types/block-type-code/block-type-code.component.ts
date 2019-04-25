@@ -1,6 +1,8 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, Input} from '@angular/core';
 import {fromEvent} from "rxjs/index";
 import {debounceTime, tap} from "rxjs/internal/operators";
+import {HistoryManagerService} from "../../../editor-list/history-manager.service";
+import {IBlock} from "../../../models";
 
 @Component({
   selector: 'app-block-type-code',
@@ -9,20 +11,39 @@ import {debounceTime, tap} from "rxjs/internal/operators";
 })
 export class BlockTypeCodeComponent implements OnInit {
 
-  public content = null;
+  @Input() block: IBlock;
   @ViewChild('codemirror') target: ElementRef;
 
 
-  constructor() { }
+  constructor(private historyManager: HistoryManagerService) { }
 
   ngOnInit() {
     // console.log(this.target.nativeElement);
-    const editor = CodeMirror(this.target.nativeElement, );
-    editor.setValue(this.content);
+    const editor = CodeMirror(this.target.nativeElement);
+    editor.setValue(this.block.content);
     fromEvent(this.target.nativeElement, 'input').pipe(
-      debounceTime(1000),
-      tap(a => console.log(this.target.nativeElement, this.target.nativeElement.innerHTML))
-    ).subscribe();
-  }
+      debounceTime(500),
+      tap(a => {
+        const firstNode = this.historyManager.history.length;
+        this.block.content = editor.getValue();
+        const node = {
+          currentContent: editor.getValue(),
+          undo: () => {
+            console.log(firstNode);
+            if (firstNode) {
+              this.historyManager.current().redo();
+            } else {
+              this.block.content = '';
+              editor.setValue(this.block.content);
+            }
+          },
+          redo: () => {
+            this.block.content = node.currentContent;
+            editor.setValue(this.block.content);
+          }
+        };
+        this.historyManager.push(node);
+      })).subscribe();
 
+  }
 }

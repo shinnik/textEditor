@@ -1,2 +1,2 @@
 <app-editor-text-style-bar class="style-bar-container" (style)="styleEmit($event)"></app-editor-text-style-bar>
-<app-input-field [id]="id" class="text-container" [initialContent]="content"></app-input-field>
+<app-input-field [id]="id" class="text-container" [block]="block" (textChanged)="textChanged($event)" ></app-input-field>

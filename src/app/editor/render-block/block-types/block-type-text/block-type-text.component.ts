@@ -1,4 +1,5 @@
 import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {IBlock} from "../../../models";
 // import { Subscription } from "rxjs/index";
 // import { EditorListStateManagerService } from "../../../editor-list/editor-list-state-manager.service";
 // import ID from '../../../../utils/ID';
@@ -10,8 +11,9 @@ import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core'
 })
 export class BlockTypeTextComponent implements OnInit {
 
-  public content: string;
-  public id: string;
+  // @Input() content: string;
+  // @Input() id: string;
+  @Input() block: IBlock;
 
   ngOnInit() {
 
@@ -21,4 +23,9 @@ export class BlockTypeTextComponent implements OnInit {
   styleEmit(command) {
     document.execCommand(command, false, null);
   }
+
+  textChanged(event) {
+    console.log(event);
+  }
+
 }

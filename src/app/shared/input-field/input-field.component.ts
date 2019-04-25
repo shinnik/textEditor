@@ -2,9 +2,12 @@ import {
   Component, OnInit, Input, Output, EventEmitter, OnDestroy, OnChanges, ViewChild,
   ElementRef
 } from '@angular/core';
-import {EditorListStateManagerService} from "../../editor/editor-list/editor-list-state-manager.service";
+import {EditorListStateManager2Service} from "../../editor/editor-list/editor-list-state-manager2.service";
 import {fromEvent, Subscription} from "rxjs/index";
 import {debounceTime, tap} from "rxjs/internal/operators";
+import {HistoryManagerService} from "../../editor/editor-list/history-manager.service";
+import update from "../../editor/editor-list/utils";
+import {IBlock} from "../../editor/models";
 
 
 @Component({
@@ -14,10 +17,12 @@ import {debounceTime, tap} from "rxjs/internal/operators";
 })
 export class InputFieldComponent implements OnInit {
 
+  @Output() textChanged = new EventEmitter<boolean>();
 
   @Input() initialContent: any;
   @Output() textSelected: EventEmitter<boolean> = new EventEmitter<boolean>();
   @ViewChild('inputField') inputField: ElementRef;
+  @Input() block: IBlock;
 
   checkSelection(event) {
     const sel = document.getSelection();
@@ -30,7 +35,8 @@ export class InputFieldComponent implements OnInit {
     console.log(event.target.innerHTML);
   }
 
-  constructor(private stateManager: EditorListStateManagerService) {
+  constructor(private stateManager: EditorListStateManager2Service,
+              private historyManager: HistoryManagerService) {
 
   }
   // private getCaretCoords() {
@@ -53,14 +59,34 @@ export class InputFieldComponent implements OnInit {
   //     }
   //   }
   // }
-
   ngOnInit() {
-    console.log(this.inputField);
+    // console.log(this.inputField);
+
     fromEvent(this.inputField.nativeElement, 'input').pipe(
       debounceTime(500),
-      tap(a => this.stateManager.updateBlock(
+      tap(a => {
+        const id = this.inputField.nativeElement.parentElement.id;
+        const firstNode = this.historyManager.history.length;
+        this.block.content = this.inputField.nativeElement.innerHTML;
+        console.log(this.block);
+        const node = {
+          currentContent: this.inputField.nativeElement.innerHTML,
+          undo: () => {
+            console.log(firstNode);
+            if (firstNode) {
+              this.historyManager.current().redo();
+            } else {
+              this.block.content = '';
+            }
+          },
+          redo: () => {
+            this.block.content = node.currentContent;
+          }
+        };
+        this.historyManager.push(node);
+      }/*this.stateManager.updateBlock(
         this.inputField.nativeElement.parentElement.id,
-        this.inputField.nativeElement.innerHTML))
+        this.inputField.nativeElement.innerHTML)*/)
     ).subscribe();
   }
 

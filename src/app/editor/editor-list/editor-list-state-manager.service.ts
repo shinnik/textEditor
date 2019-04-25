@@ -12,15 +12,15 @@ import { StateHistory } from "./history";
 })
 export class EditorListStateManagerService {
 
-  private initialState = {
+  state = {
     id: ID(),
     type: IBlockTypes.TEXTBOX,
     content: 'SOME TEXT',
     anchor: 0,
     mutation: 'add'
-  }
+  };
 
-  private history = new StateHistory(this.initialState);
+  private history = new StateHistory(this.state);
   private observableState = new BehaviorSubject(this.history.currentState);
 
 
@@ -43,6 +43,7 @@ export class EditorListStateManagerService {
     this.observableState.next(this.history.currentState);
 
   }
+
 
   setState(addingInfo: any): void {
 
