@@ -38,7 +38,6 @@ export class RenderBlockComponent implements OnInit {
 
     const componentRef = viewContainerRef.createComponent(componentFactory);
     const component = <BlockTypeTextComponent>componentRef.instance;
-    component.content = this.block.content;
-    component.id = this.block.id;
+    component.block = this.block;
   }
 }
