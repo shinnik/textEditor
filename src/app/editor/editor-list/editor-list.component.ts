@@ -48,8 +48,8 @@ export class EditorListComponent implements OnInit {
   }
 
   onChoose(addingInfo) {
-    const {name, index, ...block} = addingInfo;
-    this.stateManager.state.push({id: ID(), ...block});
+    // const {name, index, ...block} = addingInfo;
+    // this.stateManager.state.push({id: ID(), ...block});
   }
 
 }

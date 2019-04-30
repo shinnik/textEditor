@@ -37,7 +37,7 @@ export class AddingButtonComponent implements OnInit {
     // console.log(this.index);
   }
 
-  onSelected2(selectedOption: IOption) {
+  onSelected2 (selectedOption: IOption) {
     this.selectedOption = selectedOption;
     const currentState = this.stateManager.state;
     const id = ID();
@@ -45,36 +45,68 @@ export class AddingButtonComponent implements OnInit {
     const {type, content} = selectedOption;
     if (this.selectedOption.type) {
       const node = {
+        action: 'add',
+        block: {id, type, content},
+        index: this.index,
         redo: () => {
-          console.log(node.redo.action);
-          if (!node.redo.action) {
-            node.redo.action = 'add';
-            currentState.splice(this.index + 1, 0, {id, type, content});
-          } else {
-            switch (node.redo.action) {
-              case 'add':
-                currentState.splice(this.index + 1, 0, {id, type, content});
-                break;
-              case 'remove':
-                currentState.splice(this.index + 1, 1);
-                break;
-            }
-          }
-          const action = this.historyManager.history[0].redo.action;
-          this.historyManager.history[0].redo.action = this.reverseAction(action);
+          currentState.splice(this.index + 1, 0, node.block);
         },
         undo: () => {
-          // currentState.splice(this.index + 1, 1);
-          console.log(this.historyManager.history[0].redo.action);
-          const action = this.historyManager.history[0].redo.action;
-          this.historyManager.history[0].redo.action = this.reverseAction(action);
-          this.historyManager.history[0].redo();
-        }
+          debugger;
+          const prevNode = this.historyManager.current();
+          const prevAction = prevNode.action;
+          if (prevAction) {
+            if (prevAction === 'add') {
+              currentState.splice(prevNode.index + 1, 1);
+            } else if (prevAction === 'remove') {
+              currentState.splice(prevNode.index, 0, prevNode.block);
+            }
+          }
+        },
       };
       this.historyManager.push(node);
       node.redo();
     }
   }
+
+  // onSelected2(selectedOption: IOption) {
+  //   this.selectedOption = selectedOption;
+  //   const currentState = this.stateManager.state;
+  //   const id = ID();
+  //   console.log(id, 'IDID');
+  //   const {type, content} = selectedOption;
+  //   if (this.selectedOption.type) {
+  //     const node = {
+  //       redo: () => {
+  //         console.log(node.redo.action);
+  //         if (!node.redo.action) {
+  //           node.redo.action = 'add';
+  //           currentState.splice(this.index + 1, 0, {id, type, content});
+  //         } else {
+  //           switch (node.redo.action) {
+  //             case 'add':
+  //               currentState.splice(this.index + 1, 0, {id, type, content});
+  //               break;
+  //             case 'remove':
+  //               currentState.splice(this.index + 1, 1);
+  //               break;
+  //           }
+  //         }
+  //         const action = this.historyManager.history[0].redo.action;
+  //         this.historyManager.history[0].redo.action = this.reverseAction(action);
+  //       },
+  //       undo: () => {
+  //         // currentState.splice(this.index + 1, 1);
+  //         console.log(this.historyManager.history[0].redo.action);
+  //         const action = this.historyManager.history[0].redo.action;
+  //         this.historyManager.history[0].redo.action = this.reverseAction(action);
+  //         this.historyManager.history[0].redo();
+  //       }
+  //     };
+  //     this.historyManager.push(node);
+  //     node.redo();
+  //   }
+  // }
 
   reverseAction(action: string) {
     return action === 'add' ? 'remove' : 'add';

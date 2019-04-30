@@ -15,6 +15,7 @@ export class HistoryManagerService {
   }
 
   prev() {
+    debugger;
     if (this.cursor > 0) {
       this.cursor--;
       console.log('PREV', this.history[this.cursor + 1], this.cursor + 1);
