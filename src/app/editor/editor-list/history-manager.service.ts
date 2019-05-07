@@ -5,8 +5,11 @@ import { Injectable } from '@angular/core';
 })
 export class HistoryManagerService {
 
-  history: any[] = [];
-  cursor: number = null;
+  history: any[] = [{}];
+  cursor = null;
+
+  undoStack = [];
+  redoStack = [];
 
   current() {
     console.log('CURRENT HISTORY', this.history);
@@ -15,27 +18,39 @@ export class HistoryManagerService {
   }
 
   prev() {
-    debugger;
-    if (this.cursor > 0) {
+    const history = this.history[this.cursor - 1];
+    console.log('CURRENT HISTORY', this.history);
+    console.log('CURRENT NODE', this.history[this.cursor - 1], this.cursor - 1);
+    // this.cursor = this.cursor - 1;
+    return history;
+
+    /*if (this.cursor > 0) {
       this.cursor--;
       console.log('PREV', this.history[this.cursor + 1], this.cursor + 1);
       return this.history[this.cursor + 1];
     } else {
       this.cursor = -1;
       return this.history[0];
-    }
+    }*/
 
   }
 
   next() {
-    if (this.cursor >= -1 && this.cursor < this.history.length - 1) {
+    const history = this.history[this.cursor + 1];
+    console.log('CURRENT HISTORY', this.history);
+    console.log('CURRENT NODE', this.history[this.cursor + 1], this.cursor + 1);
+    // this.cursor = this.cursor + 1;
+    return history;
+
+    /*if (this.cursor >= -1 && this.cursor < this.history.length - 1) {
       this.cursor++;
       console.log('NEXT', this.history[this.cursor - 1], this.cursor - 1);
       return this.history[this.cursor];
     } else {
       this.cursor = this.history.length - 1;
       return this.history[this.history.length - 1];
-    }
+    }*/
+
   }
 
   push(node) {

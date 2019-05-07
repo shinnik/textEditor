@@ -3,6 +3,7 @@ import {fromEvent} from "rxjs/index";
 import {debounceTime, tap} from "rxjs/internal/operators";
 import {HistoryManagerService} from "../../../editor-list/history-manager.service";
 import {IBlock} from "../../../models";
+import CodeMirror from 'codemirror';
 
 @Component({
   selector: 'app-block-type-code',

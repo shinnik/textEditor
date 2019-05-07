@@ -8,7 +8,30 @@ import {debounceTime, tap} from "rxjs/internal/operators";
 import {HistoryManagerService} from "../../editor/editor-list/history-manager.service";
 import update from "../../editor/editor-list/utils";
 import {IBlock} from "../../editor/models";
+import {EditorAction} from '../../editor/render-block/block-types/adding-button/adding-button.component';
 
+
+class UpdateAction extends EditorAction {
+  id;
+  newContent;
+  prevContent;
+  block;
+
+  constructor(prevContent, newContent, block) {
+    super();
+    this.block = block;
+    this.prevContent = prevContent;
+    this.newContent = newContent;
+  }
+
+  redo() {
+    this.block.content = this.newContent;
+  }
+
+  undo() {
+    this.block.content = this.prevContent;
+  }
+}
 
 @Component({
   selector: 'app-input-field',
@@ -23,6 +46,8 @@ export class InputFieldComponent implements OnInit {
   @Output() textSelected: EventEmitter<boolean> = new EventEmitter<boolean>();
   @ViewChild('inputField') inputField: ElementRef;
   @Input() block: IBlock;
+
+  content = '';
 
   checkSelection(event) {
     const sel = document.getSelection();
@@ -65,26 +90,38 @@ export class InputFieldComponent implements OnInit {
     fromEvent(this.inputField.nativeElement, 'input').pipe(
       debounceTime(500),
       tap(a => {
-        const id = this.inputField.nativeElement.parentElement.id;
+        console.log(a);
+
+        const action = new UpdateAction(this.content, this.inputField.nativeElement.innerHTML, this.block);
+        this.content = this.inputField.nativeElement.innerHTML;
+
+
+        /*const id = this.inputField.nativeElement.parentElement.id;
         const firstNode = this.historyManager.history.length;
         this.block.content = this.inputField.nativeElement.innerHTML;
-        console.log(this.block);
+        const currentContent = this.inputField.nativeElement.innerHTML;
+        console.log(this.block);*/
         const node = {
-          currentContent: this.inputField.nativeElement.innerHTML,
+          action,
+          // currentContent: this.inputField.nativeElement.innerHTML,
           undo: () => {
-            debugger;
-            console.log(firstNode);
+            /*console.log(firstNode);
             if (firstNode) {
               this.historyManager.current().redo();
             } else {
               this.block.content = '';
-            }
+            }*/
+            action.undo();
           },
           redo: () => {
-            this.block.content = node.currentContent;
+            // this.block.content = node.currentContent;
+            action.redo();
           }
         };
-        this.historyManager.push(node);
+        // this.historyManager.push(node);
+
+        this.historyManager.undoStack.push(node);
+
       }/*this.stateManager.updateBlock(
         this.inputField.nativeElement.parentElement.id,
         this.inputField.nativeElement.innerHTML)*/)

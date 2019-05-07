@@ -18,7 +18,7 @@ export class EditorListComponent implements OnInit {
   public elements: Array<IBlock>;
 
   constructor(public stateManager: EditorListStateManager2Service,
-              private historyManager: HistoryManagerService,
+              public historyManager: HistoryManagerService,
               private cdr: ChangeDetectorRef) {
 
   }
@@ -31,19 +31,32 @@ export class EditorListComponent implements OnInit {
     console.log(this.stateManager.state);
     this.elements = this.stateManager.state;
     console.log(this.elements, 'ELEMENTS');
+    console.log(this.historyManager.history);
   }
 
   onUndo () {
     // debugger;
     // console.log(this.historyManager.current().undo());
     // this.historyManager.prev().undo();
-    this.historyManager.prev().undo();
+
+    // this.historyManager.current().undo();
+    const redoAction = this.historyManager.undoStack.pop();
+    redoAction.undo();
+    this.historyManager.redoStack.push(redoAction);
+
+    // this.historyManager.cursor--;
     this.elements = this.stateManager.state;
+    // this.historyManager.prev().undo();
     // this.stateManager.prevState();
   }
 
   onRedo () {
-    this.historyManager.next().redo();
+    const undoAction = this.historyManager.redoStack.pop();
+    undoAction.redo();
+    this.historyManager.undoStack.push(undoAction);
+
+    // this.historyManager.cursor++;
+    // this.historyManager.current().redo();
     this.elements = this.stateManager.state;
   }
 

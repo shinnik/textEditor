@@ -7,7 +7,8 @@
   </ng-container>
 </ul>
 <!--<pre>{{ stateManager.state | json }}</pre>-->
-<button (click)="onUndo($event)">UNDO</button>
-<button (click)="onRedo($event)">REDO</button>
+{{ historyManager.cursor }}
+<button (click)="onUndo($event)" [disabled]="historyManager.undoStack.length === 0">UNDO</button>
+<button (click)="onRedo($event)" [disabled]="historyManager.redoStack.length === 0">REDO</button>
 <!--<app-editor class="container"></app-editor>-->
 
