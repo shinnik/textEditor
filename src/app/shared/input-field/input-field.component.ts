@@ -72,6 +72,7 @@ export class InputFieldComponent implements OnInit {
         const node = {
           currentContent: this.inputField.nativeElement.innerHTML,
           undo: () => {
+            debugger;
             console.log(firstNode);
             if (firstNode) {
               this.historyManager.current().redo();
