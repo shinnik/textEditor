@@ -55,6 +55,7 @@ export class AddingButtonComponent implements OnInit {
           debugger;
           const prevNode = this.historyManager.current();
           const prevAction = prevNode ? prevNode.action : null;
+          const prevAction = prevNode.action;
           if (prevAction) {
             if (prevAction === 'add') {
               currentState.splice(prevNode.index + 1, 1);
