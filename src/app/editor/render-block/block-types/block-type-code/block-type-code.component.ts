@@ -3,7 +3,8 @@ import {fromEvent} from "rxjs/index";
 import {debounceTime, tap} from "rxjs/internal/operators";
 import {HistoryManagerService} from "../../../editor-list/history-manager.service";
 import {IBlock} from "../../../models";
-import CodeMirror from 'codemirror';
+import {UpdateAction} from "../../../../shared/input-field/input-field.component";
+// import CodeMirror from 'codemirror';
 
 @Component({
   selector: 'app-block-type-code',
@@ -25,25 +26,20 @@ export class BlockTypeCodeComponent implements OnInit {
     fromEvent(this.target.nativeElement, 'input').pipe(
       debounceTime(500),
       tap(a => {
-        const firstNode = this.historyManager.history.length;
-        this.block.content = editor.getValue();
+        const prevValue = this.block.content;
+        const newValue = editor.getValue();
+        const action = new UpdateAction(prevValue, newValue, this.block)
         const node = {
-          currentContent: editor.getValue(),
+          action,
           undo: () => {
-            console.log(firstNode);
-            if (firstNode) {
-              this.historyManager.current().redo();
-            } else {
-              this.block.content = '';
-              editor.setValue(this.block.content);
-            }
+            action.undo();
           },
           redo: () => {
-            this.block.content = node.currentContent;
-            editor.setValue(this.block.content);
+            action.redo();
           }
         };
-        this.historyManager.push(node);
+
+        this.historyManager.undoStack.push(node);
       })).subscribe();
 
   }

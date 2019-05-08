@@ -108,38 +108,9 @@ export class AddingButtonComponent implements OnInit {
         action,
         redo: () => {
           action.redo();
-
-          /*currentState.splice(node.index, 0, node.block as any);
-          console.log(this.historyManager.history);*/
         },
         undo: () => {
           action.undo();
-
-          /*console.log(node);
-          const prevNode = this.historyManager.prev();
-          const action = this.revertAction(prevNode);
-          const nodeIndex = prevNode && prevNode.index ? prevNode.index : node.index;
-          switch (action) {
-            case ActionType.ADD:
-              currentState.splice(nodeIndex, 0, prevNode.block);
-              break;
-            case ActionType.REMOVE:
-              currentState.splice(node.index, 1);
-              break;
-            default:
-              console.log('defatut');
-              break;
-          }*/
-          /*const prevAction = prevNode ? prevNode.action : null;
-          if (prevAction) {
-            if (prevAction === 'add') {
-              currentState.splice(prevNode.index + 1, 1);
-            } else if (prevAction === 'remove') {
-              currentState.splice(prevNode.index + 1, 0, prevNode.block);
-            }
-          } else {
-            currentState.splice(node.index + 1, 1);
-          }*/
         },
       };
       // this.historyManager.push(node);

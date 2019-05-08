@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, HostListener} from '@angular/core';
 import {IBlock, IBlockTypes} from '../models';
 import { EditorListStateManagerService } from "./editor-list-state-manager.service";
 import ID from '../../utils/ID';
@@ -28,35 +28,41 @@ export class EditorListComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.stateManager.state);
     this.elements = this.stateManager.state;
-    console.log(this.elements, 'ELEMENTS');
-    console.log(this.historyManager.history);
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.ctrlKey && event.keyCode === 90) {
+      event.preventDefault();
+      console.log(event);
+      this.onUndo();
+    } else if (event.ctrlKey && event.keyCode === 89) {
+      event.preventDefault();
+      console.log(event);
+      this.onRedo();
+    }
   }
 
   onUndo () {
-    // debugger;
-    // console.log(this.historyManager.current().undo());
-    // this.historyManager.prev().undo();
-
-    // this.historyManager.current().undo();
     const redoAction = this.historyManager.undoStack.pop();
     redoAction.undo();
     this.historyManager.redoStack.push(redoAction);
+    console.log('UNDO', this.historyManager.undoStack);
+    console.log('REDO', this.historyManager.redoStack);
 
-    // this.historyManager.cursor--;
     this.elements = this.stateManager.state;
-    // this.historyManager.prev().undo();
-    // this.stateManager.prevState();
   }
 
   onRedo () {
     const undoAction = this.historyManager.redoStack.pop();
+    console.log(undoAction);
     undoAction.redo();
     this.historyManager.undoStack.push(undoAction);
+    console.log('UNDO', this.historyManager.undoStack);
+    console.log('REDO', this.historyManager.redoStack);
 
-    // this.historyManager.cursor++;
-    // this.historyManager.current().redo();
+    // console.log(this.historyManager.history, 'HISTORY');
     this.elements = this.stateManager.state;
   }
 

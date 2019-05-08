@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {IBlock} from "../../../models";
 
 @Component({
   selector: 'app-block-type-header',
@@ -8,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class BlockTypeHeaderComponent implements OnInit {
 
   public id: string;
+  public block: IBlock;
 
   constructor() { }
 
