@@ -1,6 +1,6 @@
 <ng-container>
   <button class="button" (click)="onPlusButtonClick()">+</button>
-  <select #selection class="option-selection" *ngIf="clicked" [(ngModel)]="selectedOption" (ngModelChange)="onSelected2($event)">
+  <select #selection class="option-selection" *ngIf="clicked" [(ngModel)]="selectedOption" (ngModelChange)="onSelected($event)">
     <option class="option" [ngValue]="initialOption">{{initialOption.name}}</option>
     <option class="option" *ngFor="let option of options" [ngValue]="option">{{option.name}}</option>
   </select>

@@ -4,6 +4,7 @@
 }
 
 .style-bar-container {
+  display: none;
   width: 50%;
   height: 30px;
   padding-bottom: 5px;

@@ -1,0 +1,81 @@
+.text {
+  width: 100%;
+  padding: 4px;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  line-height: 1.6;
+  font-size: 15px;
+  box-sizing: border-box;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #959ba4;
+  }
+
+  &:hover {
+    background-color: #f9f9fa;
+
+    &::after {
+      content: 'Введите текст';
+    }
+  }
+
+  &:focus {
+    background-color: transparent;
+    cursor: default;
+
+    &::after {
+      content: 'Введите ‘/‘ чтобы выбрать блок или вводите текст';
+    }
+  }
+}
+
+.placeholder-hide::after {
+  display: none;
+}
+
+
+.header {
+  width: 100%;
+  padding: 4px;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  line-height: 1.6;
+  box-sizing: border-box;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #959ba4;
+  }
+
+  &:hover {
+    background-color: #f9f9fa;
+
+    &::after {
+      font-size: 15px;
+      font-weight: 400;
+      content: 'Введите текст';
+    }
+  }
+
+  &:focus {
+    background-color: transparent;
+    cursor: default;
+
+    &::after {
+      font-size: 15px;
+      font-weight: 400;
+      content: 'Введите ‘/‘ чтобы выбрать блок или вводите текст';
+    }
+  }
+}

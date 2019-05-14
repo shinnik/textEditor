@@ -23,10 +23,6 @@ export class EditorListComponent implements OnInit {
 
   }
 
-  onListChange(event) {
-    console.log(event);
-  }
-
   ngOnInit() {
     this.elements = this.stateManager.state;
   }
@@ -45,30 +41,24 @@ export class EditorListComponent implements OnInit {
   }
 
   onUndo () {
-    const redoAction = this.historyManager.undoStack.pop();
-    redoAction.undo();
-    this.historyManager.redoStack.push(redoAction);
-    console.log('UNDO', this.historyManager.undoStack);
-    console.log('REDO', this.historyManager.redoStack);
-
-    this.elements = this.stateManager.state;
+    if (this.historyManager.undoStack.length) {
+      const redoAction = this.historyManager.undoStack.pop();
+      redoAction.undo();
+      this.historyManager.redoStack.push(redoAction);
+      this.elements = this.stateManager.state;
+      console.log('UNDO', this.historyManager.undoStack);
+    }
   }
 
   onRedo () {
-    const undoAction = this.historyManager.redoStack.pop();
-    console.log(undoAction);
-    undoAction.redo();
-    this.historyManager.undoStack.push(undoAction);
-    console.log('UNDO', this.historyManager.undoStack);
-    console.log('REDO', this.historyManager.redoStack);
-
-    // console.log(this.historyManager.history, 'HISTORY');
-    this.elements = this.stateManager.state;
-  }
-
-  onChoose(addingInfo) {
-    // const {name, index, ...block} = addingInfo;
-    // this.stateManager.state.push({id: ID(), ...block});
+    if (this.historyManager.redoStack.length) {
+      const undoAction = this.historyManager.redoStack.pop();
+      console.log(undoAction);
+      undoAction.redo();
+      this.historyManager.undoStack.push(undoAction);
+      this.elements = this.stateManager.state;
+      console.log('REDO', this.historyManager.redoStack);
+    }
   }
 
 }

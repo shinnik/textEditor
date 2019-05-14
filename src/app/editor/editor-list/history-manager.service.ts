@@ -12,15 +12,15 @@ export class HistoryManagerService {
   redoStack = [];
 
   current() {
-    console.log('CURRENT HISTORY', this.history);
-    console.log('CURRENT NODE', this.history[this.cursor], this.cursor);
+    // console.log('CURRENT HISTORY', this.history);
+    // console.log('CURRENT NODE', this.history[this.cursor], this.cursor);
     return this.history[this.cursor];
   }
 
   prev() {
     const history = this.history[this.cursor - 1];
-    console.log('CURRENT HISTORY', this.history);
-    console.log('CURRENT NODE', this.history[this.cursor - 1], this.cursor - 1);
+    // console.log('CURRENT HISTORY', this.history);
+    // console.log('CURRENT NODE', this.history[this.cursor - 1], this.cursor - 1);
     // this.cursor = this.cursor - 1;
     return history;
 
@@ -28,8 +28,8 @@ export class HistoryManagerService {
 
   next() {
     const history = this.history[this.cursor + 1];
-    console.log('CURRENT HISTORY', this.history);
-    console.log('CURRENT NODE', this.history[this.cursor + 1], this.cursor + 1);
+    // console.log('CURRENT HISTORY', this.history);
+    // console.log('CURRENT NODE', this.history[this.cursor + 1], this.cursor + 1);
     return history;
   }
 

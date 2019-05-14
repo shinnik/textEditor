@@ -1,13 +1,13 @@
 import {
   Component, OnInit, Input, Output, EventEmitter, OnDestroy, OnChanges, ViewChild,
-  ElementRef
+  ElementRef, ChangeDetectorRef, AfterViewInit
 } from '@angular/core';
 import {EditorListStateManager2Service} from "../../editor/editor-list/editor-list-state-manager2.service";
 import {fromEvent, Subscription} from "rxjs/index";
 import {debounceTime, tap} from "rxjs/internal/operators";
 import {HistoryManagerService} from "../../editor/editor-list/history-manager.service";
 import {IBlock} from "../../editor/models";
-import {EditorAction} from '../../editor/render-block/block-types/adding-button/adding-button.component';
+import {EditorAction, ActionAddBlock} from '../../editor/render-block/block-types/adding-button/adding-button.component';
 
 
 export class UpdateAction extends EditorAction {
@@ -35,9 +35,9 @@ export class UpdateAction extends EditorAction {
 @Component({
   selector: 'app-input-field',
   templateUrl: './input-field.component.html',
-  styleUrls: ['./input-field.component.css']
+  styleUrls: ['./input-field.component.less']
 })
-export class InputFieldComponent implements OnInit {
+export class InputFieldComponent implements OnInit, AfterViewInit {
 
   @Output() textChanged = new EventEmitter<boolean>();
 
@@ -47,6 +47,12 @@ export class InputFieldComponent implements OnInit {
   @Input() block: IBlock;
 
   content = '';
+
+  constructor(private stateManager: EditorListStateManager2Service,
+              private historyManager: HistoryManagerService,
+              private cdr: ChangeDetectorRef) {
+
+  };
 
   checkSelection(event) {
     const sel = document.getSelection();
@@ -59,10 +65,38 @@ export class InputFieldComponent implements OnInit {
     console.log(event.target.innerHTML);
   }
 
-  constructor(private stateManager: EditorListStateManager2Service,
-              private historyManager: HistoryManagerService) {
-
+  onEnterPress(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      const index = this.stateManager.state.findIndex((el) => el === this.block);
+      const selectedType = 'TEXTBOX';
+      const currentState = this.stateManager.state;
+      if (selectedType) {
+        const action = new ActionAddBlock(selectedType, currentState, index + 1);
+        const node = {
+          action,
+          redo: () => {
+            action.redo();
+          },
+          undo: () => {
+            action.undo();
+          },
+        };
+        this.historyManager.undoStack.push(node);
+        node.redo();
+      }
+    }
   }
+
+  onInput() {
+    this.cdr.detectChanges();
+    if (this.inputField.nativeElement.innerHTML !== '') {
+      this.inputField.nativeElement.classList.add('placeholder-hide');
+    } else if (this.inputField.nativeElement.innerHTML === '') {
+      this.inputField.nativeElement.classList.remove('placeholder-hide');
+    }
+  }
+
   // private getCaretCoords() {
   //   let range, rect, rects, sel;
   //   let x = 0;
@@ -83,8 +117,21 @@ export class InputFieldComponent implements OnInit {
   //     }
   //   }
   // }
-  ngOnInit() {
-    // console.log(this.inputField);
+
+  // ngOnInit() {
+  //   if (this.inputField.nativeElement.innerHTML !== '') {
+  //     this.inputField.nativeElement.classList.add('placeholder-hide');
+  //   } else if (this.inputField.nativeElement.innerHTML === '' ) {
+  //     this.inputField.nativeElement.classList.remove('placeholder-hide');
+  //   }
+  // }
+
+  ngAfterViewInit() {
+    if (this.inputField.nativeElement.innerHTML !== '') {
+      this.inputField.nativeElement.classList.add('placeholder-hide');
+    } else if (this.inputField.nativeElement.innerHTML === '' ) {
+      this.inputField.nativeElement.classList.remove('placeholder-hide');
+    }
 
     fromEvent(this.inputField.nativeElement, 'input').pipe(
       debounceTime(500),

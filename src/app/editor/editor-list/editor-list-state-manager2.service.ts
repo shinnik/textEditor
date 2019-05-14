@@ -10,7 +10,7 @@ export class EditorListStateManager2Service {
   public state = [{
     id: ID(),
     type: IBlockTypes.TEXTBOX,
-    content: 'SOME TEXT',
+    content: '',
     },
   ];
 

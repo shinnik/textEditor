@@ -1,1 +1,15 @@
-<div (input)="onChangeHandler($event)" class="text-input" contenteditable="true" [innerHTML]="block.content" #inputField></div>
+<div #inputField
+     *ngIf="block.type === 'TEXTBOX'"
+     (keydown)="onEnterPress($event)"
+     (input)="onInput()"
+     class="text"
+     contenteditable="true"
+     [innerHTML]="block.content"></div>
+<h1 #inputField
+    *ngIf="block.type === 'HEADER'"
+    (keydown)="onEnterPress($event)"
+    (input)="onInput()"
+    class="header"
+    contenteditable="true"
+    [innerHTML]="block.content"></h1>
+

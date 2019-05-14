@@ -19,23 +19,23 @@ export class EditorAction {
   }
 }
 
-class ActionAddBlock extends EditorAction {
+export class ActionAddBlock extends EditorAction {
 
   defaultValueBlock = {
     [IBlockTypes.TEXTBOX]: {
       id: ID(),
       type: IBlockTypes.TEXTBOX,
-      content: 'asadf'
+      content: ''
     },
     [IBlockTypes.CODE]: {
       id: ID(),
       type: IBlockTypes.CODE,
-      content: 'function () {}'
+      content: ''
     },
     [IBlockTypes.HEADER]: {
       id: ID(),
       type: IBlockTypes.HEADER,
-      content: '<h1>asdf</h1>'
+      content: ''
     },
   };
 
@@ -94,13 +94,10 @@ export class AddingButtonComponent implements OnInit {
     // console.log(this.index);
   }
 
-  onSelected2 (selectedOption: IOption) {
+  onSelected (selectedOption: IOption) {
     this.selectedOption = selectedOption;
     const currentState = this.stateManager.state;
     const id = ID();
-    console.log(id, 'IDID');
-    const {type, content} = selectedOption;
-    console.log(this.index);
     const selectedType = this.selectedOption.type;
     if (this.selectedOption.type) {
       const action = new ActionAddBlock(selectedType, currentState, this.index + 1);
@@ -113,71 +110,18 @@ export class AddingButtonComponent implements OnInit {
           action.undo();
         },
       };
-      // this.historyManager.push(node);
       this.historyManager.undoStack.push(node);
-      // this.historyManager.cursor = this.historyManager.history.length - 1;
       node.redo();
     }
+    this.clicked = !this.clicked;
   }
 
-  revertAction = prevNode => prevNode && prevNode.action === ActionType.REMOVE ? ActionType.ADD : ActionType.REMOVE;
+  // revertAction = prevNode => prevNode && prevNode.action === ActionType.REMOVE ? ActionType.ADD : ActionType.REMOVE;
 
-  // onSelected2(selectedOption: IOption) {
-  //   this.selectedOption = selectedOption;
-  //   const currentState = this.stateManager.state;
-  //   const id = ID();
-  //   console.log(id, 'IDID');
-  //   const {type, content} = selectedOption;
-  //   if (this.selectedOption.type) {
-  //     const node = {
-  //       redo: () => {
-  //         console.log(node.redo.action);
-  //         if (!node.redo.action) {
-  //           node.redo.action = 'add';
-  //           currentState.splice(this.index + 1, 0, {id, type, content});
-  //         } else {
-  //           switch (node.redo.action) {
-  //             case 'add':
-  //               currentState.splice(this.index + 1, 0, {id, type, content});
-  //               break;
-  //             case 'remove':
-  //               currentState.splice(this.index + 1, 1);
-  //               break;
-  //           }
-  //         }
-  //         const action = this.historyManager.history[0].redo.action;
-  //         this.historyManager.history[0].redo.action = this.reverseAction(action);
-  //       },
-  //       undo: () => {
-  //         // currentState.splice(this.index + 1, 1);
-  //         console.log(this.historyManager.history[0].redo.action);
-  //         const action = this.historyManager.history[0].redo.action;
-  //         this.historyManager.history[0].redo.action = this.reverseAction(action);
-  //         this.historyManager.history[0].redo();
-  //       }
-  //     };
-  //     this.historyManager.push(node);
-  //     node.redo();
-  //   }
+  // reverseAction(action: string) {
+  //   return action === 'add' ? 'remove' : 'add';
   // }
 
-  reverseAction(action: string) {
-    return action === 'add' ? 'remove' : 'add';
-  }
-
-  onSelected(selectedOption: IOption) {
-    this.selectedOption = selectedOption;
-    if (this.selectedOption.type) {
-      this.onAddingButtonClicked.emit({
-        ...this.selectedOption,
-        index: this.index
-      });
-      console.log(this.selectedOption);
-      // return to initial option where was 'Выберите тип...'
-      this.selection.nativeElement.selectedIndex = 0;
-    }
-
-  }
 
   onPlusButtonClick() {
     this.clicked = !this.clicked;

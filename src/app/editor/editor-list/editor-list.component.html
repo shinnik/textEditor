@@ -1,8 +1,8 @@
-<ul (appListChange)="onListChange($event)" class="list-container">
+<ul class="list-container">
   <ng-container>
     <li *ngFor="let element of elements; let i = index" class="element-container">
-      <app-render-block class="render-container" [block]="element"></app-render-block>
       <app-adding-button (choose)="onChoose($event)" class="adding-button" [index]="i"></app-adding-button>
+      <app-render-block class="render-container" [block]="element"></app-render-block>
     </li>
   </ng-container>
 </ul>
