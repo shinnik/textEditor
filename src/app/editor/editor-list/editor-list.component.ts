@@ -5,6 +5,7 @@ import ID from '../../utils/ID';
 import {HistoryManagerService} from "./history-manager.service";
 import {EditorListStateManager2Service} from "./editor-list-state-manager2.service";
 
+import { iconDragNDrop, iconPlus, iconFailed } from '../../../icons';
 
 @Component({
   selector: 'app-editor-list',
@@ -25,6 +26,9 @@ export class EditorListComponent implements OnInit {
 
   ngOnInit() {
     this.elements = this.stateManager.state;
+
+
+
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -44,8 +48,10 @@ export class EditorListComponent implements OnInit {
     if (this.historyManager.undoStack.length) {
       const redoAction = this.historyManager.undoStack.pop();
       redoAction.undo();
+      console.log(redoAction);
       this.historyManager.redoStack.push(redoAction);
       this.elements = this.stateManager.state;
+      console.log('UNDO', this.elements);
       console.log('UNDO', this.historyManager.undoStack);
     }
   }
@@ -57,6 +63,7 @@ export class EditorListComponent implements OnInit {
       undoAction.redo();
       this.historyManager.undoStack.push(undoAction);
       this.elements = this.stateManager.state;
+      console.log('REDO', this.elements);
       console.log('REDO', this.historyManager.redoStack);
     }
   }

@@ -1,8 +1,10 @@
-<ul class="list-container">
+<ul [ngClass]="{'list-container': true, 'ngx-dnd-container': true}" ngxDroppable>
   <ng-container>
-    <li *ngFor="let element of elements; let i = index" class="element-container">
+    <li *ngFor="let element of elements; let i = index" ngxDraggable [ngClass]="{'element-container': true, 'ngx-dnd-item': true}">
       <app-adding-button (choose)="onChoose($event)" class="adding-button" [index]="i"></app-adding-button>
+      <button ngxDragHandle class="handle-button"></button>
       <app-render-block class="render-container" [block]="element"></app-render-block>
+      <app-delete-button class="delete-button" [index]="i"></app-delete-button>
     </li>
   </ng-container>
 </ul>

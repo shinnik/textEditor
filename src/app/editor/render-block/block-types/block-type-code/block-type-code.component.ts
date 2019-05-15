@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild, Input, ChangeDetectorRef} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, Input, ChangeDetectorRef, AfterViewInit} from '@angular/core';
 import {fromEvent} from "rxjs/index";
 import {debounceTime, tap} from "rxjs/internal/operators";
 import {HistoryManagerService} from "../../../editor-list/history-manager.service";
@@ -17,7 +17,7 @@ import 'codemirror/lib/codemirror.css';
   templateUrl: './block-type-code.component.html',
   styleUrls: ['./block-type-code.component.css']
 })
-export class BlockTypeCodeComponent implements OnInit {
+export class BlockTypeCodeComponent implements AfterViewInit {
 
   @Input() block: IBlock;
   @ViewChild('codemirror') target: ElementRef;
@@ -31,11 +31,12 @@ export class BlockTypeCodeComponent implements OnInit {
 
   constructor(private historyManager: HistoryManagerService, private cdr: ChangeDetectorRef) { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     // console.log(this.target.nativeElement);
     // this.cdr.detectChanges();
     const editor = CodeMirror(this.target.nativeElement, {mode: this.modes.javascript});
-    // editor.setValue(this.block.content);
+    console.log('CONTENT', this.block.content);
+    editor.setValue(this.block.content);
     fromEvent(this.target.nativeElement, 'input').pipe(
       debounceTime(500),
       tap(a => {
@@ -47,10 +48,15 @@ export class BlockTypeCodeComponent implements OnInit {
           action,
           undo: () => {
             action.undo();
+            // console.log(this.block.content, 'CONTENT11');
+            editor.setValue(this.block.content);
           },
           redo: () => {
-            console.log(action);
+            debugger;
+            // console.log(action);
             action.redo();
+            // console.log(this.block.content, 'CONTENT22');
+            editor.setValue(this.block.content);
           }
         };
         this.historyManager.undoStack.push(node);

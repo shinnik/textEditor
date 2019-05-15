@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { NgxDnDModule } from '@swimlane/ngx-dnd';
 
 import { AppComponent } from './app.component';
 import { EditorTextStyleBarComponent } from './editor/render-block/block-types/block-type-text/editor-text-style-bar/editor-text-style-bar.component';
@@ -9,10 +10,11 @@ import { BlockHostDirective } from './editor/block-host.directive';
 import { BlockTypeTextComponent } from './editor/render-block/block-types/block-type-text/block-type-text.component';
 import { AddingButtonComponent } from './editor/render-block/block-types/adding-button/adding-button.component';
 import { BlockTypeHeaderComponent } from './editor/render-block/block-types/block-type-header/block-type-header.component';
-import {FormsModule} from "@angular/forms";
-import {InputFieldModule} from "./shared/input-field/input-field.module";
+import { FormsModule } from "@angular/forms";
+import { InputFieldModule } from "./shared/input-field/input-field.module";
 import { ListChangeDirective } from './editor/editor-list/list-change.directive';
 import { BlockTypeCodeComponent } from './editor/render-block/block-types/block-type-code/block-type-code.component';
+import { DeleteButtonComponent } from './editor/render-block/block-types/delete-button/delete-button.component';
 
 @NgModule({
   declarations: [
@@ -26,11 +28,13 @@ import { BlockTypeCodeComponent } from './editor/render-block/block-types/block-
     BlockTypeHeaderComponent,
     ListChangeDirective,
     BlockTypeCodeComponent,
+    DeleteButtonComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    InputFieldModule
+    InputFieldModule,
+    NgxDnDModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

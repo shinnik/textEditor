@@ -15,6 +15,7 @@ export class UpdateAction extends EditorAction {
   newContent;
   prevContent;
   block;
+  editor;
 
   constructor(prevContent, newContent, block) {
     super();
@@ -37,7 +38,7 @@ export class UpdateAction extends EditorAction {
   templateUrl: './input-field.component.html',
   styleUrls: ['./input-field.component.less']
 })
-export class InputFieldComponent implements OnInit, AfterViewInit {
+export class InputFieldComponent implements AfterViewInit {
 
   @Output() textChanged = new EventEmitter<boolean>();
 
@@ -127,6 +128,9 @@ export class InputFieldComponent implements OnInit, AfterViewInit {
   // }
 
   ngAfterViewInit() {
+
+    console.log('REINIT');
+
     if (this.inputField.nativeElement.innerHTML !== '') {
       this.inputField.nativeElement.classList.add('placeholder-hide');
     } else if (this.inputField.nativeElement.innerHTML === '' ) {

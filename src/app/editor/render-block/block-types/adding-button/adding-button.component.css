@@ -6,15 +6,15 @@
   border-radius: 4px;
   background-color: transparent;
   color: #555555;
-  font-size: 22px;
-  margin-right: 5px;
+  font-size: 20px;
   outline: none;
+  margin-right: 5px;
 }
 
-.button:hover {
-  background-color: darkgoldenrod;
-  border: 2px solid darkgoldenrod;
-}
+/*.button:hover {*/
+  /*background-color: #eeeeee;*/
+  /*border: 2px solid #eeeeee;*/
+/*}*/
 
 .option {
   background-color: #ffdd2d;

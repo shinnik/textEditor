@@ -11,13 +11,45 @@
   display: inline-flex;
   list-style-type: none;
   margin-bottom: 4px;
+  align-content: flex-start;
 }
 
-.element-container > .adding-button {
-  display: inline-flex;
-  position: relative;
-  height: fit-content;
+.adding-button {
+  display: flex;
+  align-content: center;
+  align-self: flex-start;
+  background: url(./icons/baseline-add-24px.svg);
+  background-size: 100% 100%;
 }
+
+.delete-button {
+  display: flex;
+  align-content: center;
+  background: url(./icons/baseline-delete-24px.svg);
+  background-size: 100% 100%;
+  align-self: flex-start;
+}
+
+.handle-button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 4px;
+  color: #555555;
+  font-size: 14px;
+  outline: none;
+  margin-right: 10px;
+  display: flex;
+  align-content: center;
+  background: url(./icons/baseline-drag_indicator-24px.svg);
+  background-size: 100% 100%;
+}
+
+/*.handle-button:hover {*/
+  /*background-color: #eeeeee;*/
+  /*border: 2px solid #eeeeee;*/
+
+/*}*/
 
 ul.wysiwyg-list {
   padding: 0px;
@@ -27,4 +59,79 @@ ul.wysiwyg-list {
 .render-container {
   width: 70%;
   height: inherit;
+}
+
+.ngx-dnd-container {
+  /*background-color: rgba(255, 255, 255, 0.2);*/
+  /*border: 2px solid red;*/
+  /*margin: 10px;*/
+  /*padding: 10px; */
+}
+/*.ngx-dnd-container.gu-empty {*/
+  /*border: 2px dotted red; }*/
+.ngx-dnd-container .ex-moved {
+  background-color: #e74c3c; }
+.ngx-dnd-container .ex-over {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.ngx-dnd-container .handle {
+  padding: 0 5px;
+  margin-right: 5px;
+  background-color: rgba(0, 0, 0, 0.4);
+  cursor: move;
+}
+
+.no-select {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* IE/Edge */
+  user-select: none;
+  /* non-prefixed version, currently
+                                  not supported by any browser */ }
+
+.ngx-dnd-item {
+  /*margin: 10px;*/
+  /*padding: 10px;*/
+  /*background-color: rgba(0, 0, 0, 0.2);*/
+  transition: opacity 0.4s ease-in-out;
+}
+.ngx-dnd-item:not(.has-handle):not(.move-disabled),
+.ngx-dnd-item.has-handle [ngxdraghandle],
+.ngx-dnd-item.has-handle [ngxDragHandle] {
+  /*cursor: move;*/
+  /*cursor: grab;*/
+  /*cursor: -moz-grab;*/
+  /*cursor: -webkit-grab; }*/
+}
+.ngx-dnd-item .ngx-dnd-content {
+  user-select: none; }
+
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80); }
+
+.gu-hide {
+  display: none !important; }
+
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important; }
+
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
 }
